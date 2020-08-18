@@ -8,8 +8,8 @@ import 'react-dates/initialize';
 // console.log(now.format('MMM Do, YYYY'));
 
 export default class ExpenseForm extends React.Component {
-    
-    constructor(props){
+
+    constructor(props) {
         super(props);
         this.state = {
             description: props.expense ? props.expense.description : '',
@@ -21,7 +21,7 @@ export default class ExpenseForm extends React.Component {
         };
     }
 
-   
+
 
     onDescriptionChange = (e) => {
         const description = e.target.value;

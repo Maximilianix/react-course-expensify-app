@@ -5,8 +5,10 @@ import AppRouter from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
+import './firebase/firebase';
 
 const store = configureStore();
+
 
 const jsx = (
   <Provider store={store}>

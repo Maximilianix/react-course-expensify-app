@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import uuid from 'uuid';
 import database from '../firebase/firebase';
 
 // ADD_EXPENSE
@@ -7,7 +7,6 @@ export const addExpense = (expense) => ({
   expense
 });
 
-// returning function worls only with applyMiddleware
 export const startAddExpense = (expenseData = {}) => {
   return (dispatch) => {
     const {
@@ -16,15 +15,14 @@ export const startAddExpense = (expenseData = {}) => {
       amount = 0,
       createdAt = 0
     } = expenseData;
-    const expense = { description, note, amount, createdAt }
-    database.ref('expenses')
-      .push(expense)
-      .then((ref) => {
-        dispatch(addExpense({
-          id: ref.key,
-          ...expense
-        }));
-      });
+    const expense = { description, note, amount, createdAt };
+
+    return database.ref('expenses').push(expense).then((ref) => {
+      dispatch(addExpense({
+        id: ref.key,
+        ...expense
+      }));
+    });
   };
 };
 
@@ -34,6 +32,14 @@ export const removeExpense = ({ id } = {}) => ({
   id
 });
 
+export const startRemoveExpense = ({ id } = {}) => {
+  return (dispatch) => {
+    return database.ref(`expenses/${id}`).remove().then(() => {
+      dispatch(removeExpense({ id }));
+    });
+  };
+};
+
 // EDIT_EXPENSE
 export const editExpense = (id, updates) => ({
   type: 'EDIT_EXPENSE',
@@ -41,23 +47,32 @@ export const editExpense = (id, updates) => ({
   updates
 });
 
-//SET EXPENSES
+export const startEditExpense = (id, updates) => {
+  return (dispatch) => {
+    return database.ref(`expenses/${id}`).update(updates).then(() => {
+      dispatch(editExpense(id, updates));
+    });
+  };
+};
+
+// SET_EXPENSES
 export const setExpenses = (expenses) => ({
   type: 'SET_EXPENSES',
   expenses
 });
 
-// START SET EXPENSES
 export const startSetExpenses = () => {
   return (dispatch) => {
     return database.ref('expenses').once('value').then((snapshot) => {
       const expenses = [];
+
       snapshot.forEach((childSnapshot) => {
         expenses.push({
           id: childSnapshot.key,
           ...childSnapshot.val()
         });
       });
+
       dispatch(setExpenses(expenses));
     });
   };

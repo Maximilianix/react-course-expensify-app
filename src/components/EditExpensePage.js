@@ -2,8 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ExpenseForm from './ExpenseForm';
 import { startEditExpense, startRemoveExpense } from '../actions/expenses';
+import ConfirmRemoveExpense from './ConfirmRemoveExpense';
 
 export class EditExpensePage extends React.Component {
+
+  state = {
+    show: false
+  };
+
+  showModal = () => {
+    this.setState({
+      show: !this.state.show
+    });
+  };
   onSubmit = (expense) => {
     this.props.startEditExpense(this.props.expense.id, expense);
     this.props.history.push('/');
@@ -12,6 +23,11 @@ export class EditExpensePage extends React.Component {
     this.props.startRemoveExpense({ id: this.props.expense.id });
     this.props.history.push('/');
   };
+  onRemove = () => {
+    this.props.startRemoveExpense({ id: this.props.expense.id });
+    this.props.history.push('/');
+  };
+
   render() {
     return (
       <div>
@@ -26,9 +42,14 @@ export class EditExpensePage extends React.Component {
             onSubmit={this.onSubmit}
           />
           <div>
-            <button className="button button--secondary" onClick={this.onRemove}>Remove Expense</button>
+            <button className="button button--secondary" onClick={() => { this.showModal() }}>Remove Expense</button>
           </div>
         </div>
+        <ConfirmRemoveExpense
+          onConfirm={this.onRemove}
+          show={this.state.show}
+          onClose={() => { this.showModal() }}
+        />
       </div>
     );
   }

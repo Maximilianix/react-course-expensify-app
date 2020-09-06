@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import AppRouter, { history } from './routers/AppRouter';
-import configureStore from './store/configureStore';
-import { startSetExpenses } from './actions/expenses';
-import { login, logout } from './actions/auth';
+// import AppRouter, { history } from './routers/AppRouter';
+// import configureStore from './store/configureStore';
+// import { startSetExpenses } from './actions/expenses';
+// import { login, logout } from './actions/auth';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import 'react-dates/lib/css/_datepicker.css';
-import { firebase } from './firebase/firebase';
+// import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage'
+
+const login = lazy(() => import('./actions/auth'));
+const logout = lazy(() => import('./actions/auth'));
+const history = lazy(() => import('./routers/AppRouter'));
+const AppRouter = lazy(() => import('./routers/AppRouter'));
+const firebase = lazy(() => import('./firebase/firebase'));
+const startSetExpenses = lazy(() => import('./actions/expenses'));
+const configureStore = lazy(() => import('./store/configureStore'));
 
 const store = configureStore();
 const jsx = (
